@@ -12,7 +12,7 @@ def ABM_peliculas():
         print(opcion3_submenu_1)
         baja_pelicula()
     elif opcion_submenu == "4":
-        volver_menu()
+        return
     else:
         print("Opción incorrecta, vuelva a ingresar una opción")
         ABM_peliculas()
@@ -30,11 +30,9 @@ def reportes_estadisticas():
     elif opcion_submenu == "3":
         print(opcion3_submenu_3)
     elif opcion_submenu == "4":
-        print(opcion4_submenu_3)
+        return
     else:
         reportes_estadisticas()
-def salir_programa():
-    print("Saliste del programa, Muchas gracias por utilizar CINEMA+")
 
 #Alta de peliculas
 
@@ -47,13 +45,16 @@ def leer_archivo(nombre_archivo):
         with open(nombre_archivo, 'r') as conexion:
             return json.load(conexion)
 
+
 def grabar_archivo(lista_peliculas, nombre_archivo):
         with open(nombre_archivo, "w") as conexion:
             json.dump(lista_peliculas, conexion, indent=4)
 
 def alta():
-        lista_peliculas = leer_archivo("peliculas.json")
-        generos_disponibles = ("Drama", "Romance", "Ciencia ficción", "Fantasía", "Crimen", "Animación", "Musical", "Acción")
+        lista_peliculas = leer_archivo("peliculasNew.json")
+        generos_disponibles = ("Acción", "Animación", "Comedia", "Drama", "Ciencia ficción", "Terror", "Suspenso", "Romántica")
+        clasificacion = ["ATP" , "PG" , "PG-13" , "R", "NC-17"]
+        clasificacion_vacio = []
 
         id_pelicula = random.randint(10000, 99999)
         titulo = input("Ingrese el titulo de la pelicula: ")
@@ -77,35 +78,70 @@ def alta():
                 print("Opcion incorrecta")
                 continua = input("Desea agregar otro genero?: (S/N)")
                 if continua == "N":
-                 break
+                    break
                 elif continua == "S":
-                 continue
+                    continue
         
 
         duracion = int(input("Ingrese la duracion de la pelicula en minutos: "))
+        sinopsis = input("Escriba una sinopsis de la pelicula: ")
+        pais_de_origen = input("Ingrese el país de origen de la pelicula: ")
+        idioma = input("Ingrese el idioma de la pelicula: ")
+        while True:
+            clasificacion_ingresada = input("Ingrese una clasificación: ")
+            if clasificacion_ingresada in clasificacion:
+                clasificacion_vacio.append(clasificacion_ingresada)
+            elif clasificacion_ingresada not in clasificacion:
+                print("Opción invalida, elija una clasificación valida")
+                continue
+            break
+        calificacion = 0
+        disponible = True
+                
 
         peliculas_a_agregar = {
             "id": id_pelicula,
             "titulo": titulo,
+            "duracion": duracion,
             "genero": generos,
-            "duracion": duracion
+            "sinopsis": sinopsis,
+            "pais_de_origen": pais_de_origen,
+            "idioma": idioma,
+            "clasificacion": clasificacion_vacio,
+            "calificacion": calificacion,
+            "disponible": disponible
         }
 
         lista_peliculas.append(peliculas_a_agregar)
         grabar_archivo(lista_peliculas, "peliculas.json")
         print("Película agregada exitosamente.")         
 
-    
+lista_peliculas = leer_archivo("peliculasNew.json")
 
+def buscar_titulo_id():
+
+    id_buscado = int(input("Ingrese id:"))
+
+    for pelicula in lista_peliculas:
+        if pelicula['id'] == id_buscado:
+           print(pelicula)
+     
+
+def buscar_pelicula_titulo():
+   
+    titulo_buscado = input("Ingrese el titulo de la pelicula que desee buscar: ")
+
+    for pelicula in lista_peliculas:
+        if pelicula["titulo"] == titulo_buscado:
+            print(pelicula)
+    
 
 def modificacion_pelicula_existente():
     opcion_submenu = input("Elija una opción: ")
     if opcion_submenu == "1":
-        id_peli = int(input("Ingrese el id de la pelicula: "))
-        print(f"La id de la peli es {id_peli}")
+        buscar_titulo_id()
     elif opcion_submenu == "2":
-        titulo_peli = input("Ingrese el titulo de la pelicula: ")
-        print(titulo_peli)
+        buscar_pelicula_titulo()
     elif opcion_submenu == "3":
         print(submenu_1)
         ABM_peliculas()
@@ -116,22 +152,14 @@ def baja_pelicula():
     if opcion_submenu == "1":
         int(input("Ingrese el id de la pelicula: "))
     elif opcion_submenu == "2":
-        input("Ingrese el titulo de la pelicula: ")
+        buscar_pelicula_titulo()
     elif opcion_submenu == "3":
         print(opcion3_subsubsubmenu_1)
     else:
-        baja_pelicula()
-def volver_menu():
-    menu_inicio() 
+        baja_pelicula() 
 def menu_inicio():
     while True:
-        print("""
-            Bienvenidos a CINEMA
-            1. ABM de películas
-            2. Calificación de títulos
-            3. Reportes y estadísticas
-            4. Salir
-            """)
+        print(menu)
         opcionUsuario = input("ingrese la opcion que desea :")
         if opcionUsuario == "1":
             print(submenu_1)
@@ -142,7 +170,8 @@ def menu_inicio():
             print(submenu_3)
             reportes_estadisticas()
         elif opcionUsuario == "4":
-            salir_programa()
+            print("Saliste del programa, Muchas gracias por utilizar CINEMA+")
+            break
         else:
             print("opción invalida")
             continue
@@ -165,13 +194,7 @@ opcion4_submenu_3 = "Antes de salir, debe preguntarle al usuario si desea finali
 submenu_4 = "Saliste del programa. BYE"
 #WHILE
 while True:
-    print("""
-          Bienvenidos a CINEMA
-          1. ABM de películas
-          2. Calificación de títulos
-          3. Reportes y estadísticas
-          4. Salir
-         """)
+    print(menu)
     opcionUsuario = input("ingrese la opcion que desea :")
     if opcionUsuario == "1":
         print(submenu_1)
@@ -182,8 +205,8 @@ while True:
         print(submenu_3)
         reportes_estadisticas()
     elif opcionUsuario == "4":
-        salir_programa()
+        print("Saliste del programa, Muchas gracias por utilizar CINEMA+")
+        break
     else:
         print("opción invalida")
         continue
-    break

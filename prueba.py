@@ -8,30 +8,16 @@ def leer_archivo(nombre_archivo):
 lista_peliculas = leer_archivo("peliculasNew.json")
 
 
-def buscar_pelicula_titulo():
-   
-    titulo_buscado = input("Ingrese el titulo de la pelicula que desee buscar: ")
-    encontrada = False
 
-    for pelicula in lista_peliculas:
-        if pelicula["titulo"] == titulo_buscado:
-            print(pelicula)
-            encontrada = True
-            break
-    if not encontrada:
-      print("Pelicula no existente")   
+def boca():
+    lista_peliculas = leer_archivo("peliculasNew.json")
 
-buscar_pelicula_titulo()
-
-
-def buscar_titulo_id():
-
-    id_buscado = int(input("Ingrese id:"))
-
-    for pelicula in lista_peliculas:
-
-        if pelicula['id'] == id_buscado:
-           print(pelicula)
-   
-buscar_titulo_id()    
-
+    while True:
+        titu = input("ingrese el titulo: ")
+        for x in lista_peliculas:
+            if titu in x['titulo']:
+                print(x)
+                print(f"Titulos encontrados para modificar: {titu['titulo']}")
+                False
+        break
+boca()    
